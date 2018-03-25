@@ -1,23 +1,23 @@
 pragma solidity ^0.4.21;
 
-import "github.com/oraclize/ethereum-api/oraclizeAPI.sol"
+import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
 
 /// @title Contract to bet Ether for a number and win randomly when the 
 /// number of bets is met.
-contract Casino {
+contract Casino is usingOraclize {
   address public owner;
 
   // The minimum bet a user has to make to participate in the game
-  uint256 public minimumBet = 100 finney; // Equal to 0.1 ether
+  uint public minimumBet = 100 finney; // Equal to 0.1 ether
 
   // The total number of bets the users have made
-  uint256 public totalBet;
+  uint public totalBet;
 
   // The maximum amount of bets can be made for each game
-  uint256 public numberOfBets;
+  uint public numberOfBets;
 
   // The maximum amount of bets that can be made for each game
-  uint256 public maxAmountOfBets = 10;
+  uint public maxAmountOfBets = 10;
 
   // The max amount of bets that cannot be exceeded to avoud excessive gas 
   // consumption when distributing the prizes and restarting the game.
@@ -52,7 +52,7 @@ contract Casino {
   /// @param _minimumBet The minimum bet that each user has to make in order to
   ///         participate in the game
   /// @param _maxAmountOfBets The max amount of bets that are required per game
-  function Casino(uint256 _minimumBet) public {
+  function Casino(uint _minimumBet, uint _maxAmountOfBets) public {
     owner = msg.sender;
 
     if(_minimumBet > 0) minimumBet = _minimumBet;
@@ -67,7 +67,7 @@ contract Casino {
   /// @param player The address of the player to check
   /// @return bool Returns true if it exists or false if it doesn't
   function checkPlayerExists(address player) returns(bool) {
-    if(playerBetsNumber[player]) > 0)
+    if(playerBetsNumber[player] > 0)
       return true;
     else
       return false;
@@ -76,7 +76,7 @@ contract Casino {
   /// @notice To bet for a number by sending Ether
   /// @param numberToBet The number that the player wants to bet for.
   ///        Must be between 1 and 10 both inclusive
-  function bet(uint256 numberSelected) public payable {
+  function bet(uint numberToBet) public payable {
 
     // Check that the max amount of bets hasn't been met yet
     assert(numberOfBets < maxAmountOfBets);
