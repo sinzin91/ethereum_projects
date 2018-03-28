@@ -86,12 +86,14 @@ class App extends Component {
     ]);
 
     this.state = {
-      ContractInstance: MyContract.at('0x78602db2670a01c7b80c2a96135607a4ce320031')
+      ContractInstance: MyContract.at('0x78602db2670a01c7b80c2a96135607a4ce320031'),
+      contractState: ''
     }
 
     this.querySecret = this.querySecret.bind(this);
 
     this.queryContractState = this.queryContractState.bind(this);
+    this.handleContractStateSubmit = this.handleContractStateSubmit.bind(this);
 
   }
 
@@ -113,6 +115,24 @@ class App extends Component {
     })
   }
 
+  handleContractStateSubmit(event) {
+    event.preventDefault();
+
+    const { setState } = this.state.ContractInstance;
+    const { contractState: newState } = this.state;
+
+    setState(
+      newState,
+      {
+        gas: 300000,
+        from: window.web3.eth.accounts[0],
+        value: window.web3.toWei(0.01, 'ether')
+      }, (err, result) => {
+        console.log('Smart contract state is changing.');
+      }
+    )
+  }
+
   render() {
     return (
       <div className="App">
@@ -129,6 +149,16 @@ class App extends Component {
         <button onClick={ this.queryContractState }> Query Smart Contract's State </button>
         <br />
         <br />
+        <form onSubmit={ this.handleContractStateSubmit }>
+          <input
+            type="text"
+            name="state-change"
+            placeholder="Enter new state..."
+            value={ this.state.contractState }
+            onChange={ event => this.setState ({ contractState: event.target.value }) } />
+          <button type="submit"> Submit </button>
+        </form>
+
       </div>
     );
   }
