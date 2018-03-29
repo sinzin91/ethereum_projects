@@ -10,49 +10,15 @@ class App extends Component {
       {
         "constant": false,
         "inputs": [],
-        "name": "kill",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "newState",
-            "type": "string"
-          }
-        ],
-        "name": "setState",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
-        "type": "function"
-      },
-      {
-        "payable": true,
-        "stateMutability": "payable",
-        "type": "fallback"
-      },
-      {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "getSecret",
+        "name": "setExperimentInMotion",
         "outputs": [
           {
             "name": "",
-            "type": "string"
+            "type": "bool"
           }
         ],
-        "payable": false,
-        "stateMutability": "view",
+        "payable": true,
+        "stateMutability": "payable",
         "type": "function"
       },
       {
@@ -70,6 +36,57 @@ class App extends Component {
         "type": "function"
       },
       {
+        "constant": false,
+        "inputs": [],
+        "name": "kill",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "pseudoRandomResult",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "getSecret",
+        "outputs": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "newState",
+            "type": "string"
+          }
+        ],
+        "name": "setState",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
         "constant": true,
         "inputs": [],
         "name": "you_awesome",
@@ -82,11 +99,34 @@ class App extends Component {
         "payable": false,
         "stateMutability": "view",
         "type": "function"
+      },
+      {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "fallback"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "result",
+            "type": "bool"
+          }
+        ],
+        "name": "ExperimentComplete",
+        "type": "event"
       }
     ]);
 
     this.state = {
-      ContractInstance: MyContract.at('0x78602db2670a01c7b80c2a96135607a4ce320031'),
+      ContractInstance: MyContract.at('0x6354e0ee7aa7e2ebd443a20ec52e36b7d0eb2f30'),
       contractState: ''
     }
 
@@ -95,6 +135,10 @@ class App extends Component {
     this.queryContractState = this.queryContractState.bind(this);
     this.handleContractStateSubmit = this.handleContractStateSubmit.bind(this);
 
+    this.queryConditionResult = this.queryConditionResult.bind (this);
+    this.activateExperiment = this.activateExperiment.bind (this);
+
+    this.state.event = this.state.ContractInstance.ExperimentComplete();
   }
 
   querySecret(){
@@ -112,6 +156,26 @@ class App extends Component {
     getState  ((err, state) => {
       if(err) console.err('An error occurred::::', err);
       console.log('This is our contract\'s state::::', state);
+    })
+  }
+
+  queryConditionResult () {
+    const { pseudoRandomResult } = this.state.ContractInstance;
+
+    pseudoRandomResult ((err, result) => {
+      console.log ('This is the smart contract conditional::::', result);
+    })
+  }
+
+  activateExperiment () {
+    const { setExperimentInMotion } = this.state.ContractInstance;
+
+    setExperimentInMotion ({
+      gas: 300000,
+      from: window.web3.eth.accounts[0],
+      value: window.web3.toWei (0.01, 'ether')
+    }, (err, result) => {
+      console.log ('Experiment to determine true or false set in motion.');
     })
   }
 
@@ -134,6 +198,12 @@ class App extends Component {
   }
 
   render() {
+    this.state.event.watch ((err, event) => {
+      if (err) console.error ('An error occurred::::', err);
+      console.log ('This is the event::::', event);
+      console.log ('This is the experiment result::::', event.args.result);
+    })
+
     return (
       <div className="App">
         <header className="App-header">
@@ -146,7 +216,7 @@ class App extends Component {
         <button onClick={ this.querySecret }> Query Smart Contract's Secret </button>
         <br />
         <br />
-        <button onClick={ this.queryContractState }> Query Smart Contract's State </button>
+        <button onClick={ this.queryConditionResult }> Query Smart Contract's State </button>
         <br />
         <br />
         <form onSubmit={ this.handleContractStateSubmit }>
@@ -158,8 +228,13 @@ class App extends Component {
             onChange={ event => this.setState ({ contractState: event.target.value }) } />
           <button type="submit"> Submit </button>
         </form>
-
-      </div>
+       <br />
+       <br />
+       <button onClick={ this.queryContractState }> Query Smart Contract Conditional Result </button>
+       <br />
+       <br />
+       <button onClick={ this.activateExperiment }> Start Experiment on Smart Contract </button>
+        </div>
     );
   }
 }
