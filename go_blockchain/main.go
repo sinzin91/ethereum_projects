@@ -60,7 +60,7 @@ func run() error {
 	mux := makeMuxRouter()
 	httpPort := os.Getenv("PORT")
 	log.Println("Listening on ", os.Getenv("PORT"))
-	s := &httpServer{
+	s := &http.Server{
 		Addr:           ":" + httpPort,
 		Handler:        mux,
 		ReadTimeout:    10 * time.Second,
@@ -115,7 +115,7 @@ func handleWriteBlock(w http.ResponseWriter, r *http.Request) {
 		spew.Dump(Blockchain)
 	}
 
-	respondWithJson(w, r, http.StatusCreated, newBlock)
+	respondWithJSON(w, r, http.StatusCreated, newBlock)
 }
 
 func respondWithJSON(w http.ResponseWriter, r *http.Request, code int, payload interface{}) {
@@ -155,7 +155,7 @@ func calculateHash(block Block) string {
 }
 
 // create a new block using previous block's hash
-func generateBlock(oldBlock Block, BPM int) (Block, error) {
+func generateBlock(oldBlock Block, BPM int) Block {
 
 	var newBlock Block
 
@@ -167,5 +167,5 @@ func generateBlock(oldBlock Block, BPM int) (Block, error) {
 	newBlock.PrevHash = oldBlock.Hash
 	newBlock.Hash = calculateHash(newBlock)
 
-	return newBlock, nil
+	return newBlock
 }
