@@ -28,3 +28,8 @@ from: https://medium.com/@mycoralhealth/code-your-own-blockchain-mining-algorith
 ## pet-shop-tutorial
 Create a pet shop with Truffle and Ganache, with front end
 from: http://truffleframework.com/tutorials/pet-shop
+
+## quorum_7nodes
+Use truffle and quorum to create private transactions between nodes
+from: http://truffleframework.com/tutorials/building-dapps-for-quorum-private-enterprise-blockchains
+Used docker image to setup private nodes instead of vagrant: https://github.com/ConsenSys/quorum-docker-Nnodes
