@@ -15,7 +15,7 @@ https://medium.com/@zubairnahmed/https-medium-com-zubairnahmed-react-ethereum-ge
 creating an erc20 coin with OpenZepplin framework
 http://www.masonforest.com/blockchain/ethereum/2017/11/13/how-to-deploy-an-erc20-token-in-20-minutes.html
 
-# Go blockchain
+## Go blockchain
 `main.go`: Basic Blockchain 
 from: https://medium.com/@mycoralhealth/code-your-own-blockchain-in-less-than-200-lines-of-go-e296282bcffc
 
@@ -24,3 +24,7 @@ from: https://medium.com/@mycoralhealth/part-2-networking-code-your-own-blockcha
 
 `pow.go`: Proof of Work blockchain
 from: https://medium.com/@mycoralhealth/code-your-own-blockchain-mining-algorithm-in-go-82c6a71aba1f
+
+## pet-shop-tutorial
+Create a pet shop with Truffle and Ganache, with front end
+from: http://truffleframework.com/tutorials/pet-shop
