@@ -33,3 +33,7 @@ from: http://truffleframework.com/tutorials/pet-shop
 Use truffle and quorum to create private transactions between nodes
 from: http://truffleframework.com/tutorials/building-dapps-for-quorum-private-enterprise-blockchains
 Used docker image to setup private nodes instead of vagrant: https://github.com/ConsenSys/quorum-docker-Nnodes
+
+## tutorial_token
+Create a basic token with OpenZeppelin and truffle, with front end
+from: http://truffleframework.com/tutorials/robust-smart-contracts-with-openzeppelin
