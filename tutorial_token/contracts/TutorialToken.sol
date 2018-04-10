@@ -11,5 +11,6 @@ contract TutorialToken is StandardToken {
   function TutorialToken() public {
     totalSupply_ = INITIAL_SUPPLY;
     balances[msg.sender] = INITIAL_SUPPLY;
+    Transfer(0x0, msg.sender, INITIAL_SUPPLY);
   }
 }

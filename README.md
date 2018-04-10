@@ -37,3 +37,18 @@ Used docker image to setup private nodes instead of vagrant: https://github.com/
 ## tutorial_token
 Create a basic token with OpenZeppelin and truffle, with front end
 from: http://truffleframework.com/tutorials/robust-smart-contracts-with-openzeppelin
+
+## debugging_smart_contracts
+Debugging a basic smart contract with Truffle
+
+from:
+
+### Highlights
+* `truffle develop` creates an interactive repl with a preconfigured blockchain and Ethereum
+  addresses for easy development. Uses Ganache under the hood, with auto-mining on.
+* `migrate --reset` compile and reset contract in one step within console
+* `truffle develop --log` run in a separate terminal while `truffle develop` is running to get logs
+  including useful data like the transaction id of failed transactions
+* `debug <Transaction ID>` from within `truffle develop` allows you to debug the smart contract
+
+
